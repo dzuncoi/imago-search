@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { preprocess } from '@/lib/search/preprocess'
 import type { MediaItem } from '@/lib/search/types'
 

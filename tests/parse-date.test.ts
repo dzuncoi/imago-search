@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { parseDate } from '@/lib/search/parse-date'
 
 describe('parseDate', () => {

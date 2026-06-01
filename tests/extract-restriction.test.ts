@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { extractRestriction } from '@/lib/search/extract-restriction'
 
 describe('extractRestrictions', () => {

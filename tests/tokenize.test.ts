@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { tokenize } from '@/lib/search/tokenize'
 
 describe('tokenize', () => {

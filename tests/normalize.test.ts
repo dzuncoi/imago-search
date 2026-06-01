@@ -1,4 +1,3 @@
-import { it, describe, expect } from 'vitest'
 import { normalize } from '@/lib/search/normalize'
 
 describe('normalize', () => {
@@ -14,7 +13,6 @@ describe('normalize', () => {
     expect(normalize('Año')).toBe('ano')
   })
 
-
   it('keeps digits', () => {
     expect(normalize('J.Morris, 1948')).toBe('j.morris, 1948')
   })
@@ -23,5 +21,4 @@ describe('normalize', () => {
     const input = 'Müller Café Año'
     expect(normalize(normalize(input))).toBe(normalize(input))
   })
-
 })
