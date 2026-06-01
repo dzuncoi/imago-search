@@ -8,10 +8,16 @@ export type MediaItem = {
   breite: string
 }
 
+export type Restriction = {
+  type: 'in' | 'not_in'
+  countries: string[]
+}
+
 export type IndexedMediaItem = MediaItem & {
   datumIso: string | null
   suchtextTokens: string[]
   fotografenTokens: string[]
+  restriction: Restriction | null
 }
 
 export type SortOrder = 'relevance' | 'date_asc' | 'date_desc'
