@@ -6,16 +6,20 @@ import { SearchBar } from '@/components/search/SearchBar'
 import { ResultGrid } from '@/components/search/ResultGrid'
 import { ResultGridSkeleton } from '@/components/search/ResultGridSkeleton'
 import axios from 'axios'
+import { useSearchParams } from 'next/navigation'
 
-const searchMedia = async () => {
-  const res = await axios.get<SearchResponse>('/api/search')
+const searchMedia = async (queryString?: string) => {
+  const res = await axios.get<SearchResponse>(`/api/search?${queryString}`)
   return res.data
 }
 
 export default function Home() {
+  const urlParams = useSearchParams()
+  const queryString = urlParams.toString()
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['search'],
-    queryFn: () => searchMedia(),
+    queryKey: ['search', queryString],
+    queryFn: () => searchMedia(queryString),
     placeholderData: keepPreviousData,
   })
 
@@ -26,7 +30,7 @@ export default function Home() {
       <div className="gap-stack-lg flex w-full flex-col">
         <header className="gap-stack-md flex flex-col">
           <h1 className="text-display-lg-mobile md:text-display-lg">Visual Discovery</h1>
-          <SearchBar isLoading={isLoading} onSearch={() => {}} />
+          <SearchBar isLoading={isLoading} />
         </header>
 
         <section aria-live="polite" aria-busy={isLoading}>
