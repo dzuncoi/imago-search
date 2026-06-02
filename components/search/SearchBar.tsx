@@ -27,7 +27,7 @@ export function SearchBar({ value, onChange, isLoading = false }: SearchBarProps
     return () => clearTimeout(timer)
   }, [inputValue, value, onChange])
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     onChange(inputValue)
   }

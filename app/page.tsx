@@ -7,6 +7,8 @@ import { SearchBar } from '@/components/search/SearchBar'
 import { ResultGrid } from '@/components/search/ResultGrid'
 import { ResultGridSkeleton } from '@/components/search/ResultGridSkeleton'
 import { Pagination } from '@/components/search/Pagination'
+import { DateRangeFilter } from '@/components/search/DateRangeFilter'
+import { RestrictionFilter } from '@/components/search/RestrictionFilter'
 import { useSearchParamsState } from '@/hooks/useSearchParamsState'
 import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
@@ -21,7 +23,7 @@ function SearchPage() {
   const queryString = urlParams.toString()
 
   // Single owner of the URL params; writes here update `queryString` -> refetch.
-  const [{ q }, setParams] = useSearchParamsState()
+  const [{ q, dateFrom, dateTo, restrictions }, setParams] = useSearchParamsState()
 
   const handleQueryChange = useCallback(
     (next: string) => setParams({ q: next, page: 1 }),
@@ -29,6 +31,15 @@ function SearchPage() {
   )
   const handlePageChange = useCallback(
     (page: number) => setParams({ page }),
+    [setParams],
+  )
+  const handleDateRangeChange = useCallback(
+    ({ from, to }: { from: string | null; to: string | null }) =>
+      setParams({ dateFrom: from, dateTo: to, page: 1 }),
+    [setParams],
+  )
+  const handleRestrictionsChange = useCallback(
+    (next: string[]) => setParams({ restrictions: next, page: 1 }),
     [setParams],
   )
 
@@ -46,6 +57,10 @@ function SearchPage() {
         <header className="gap-stack-md flex flex-col">
           <h1 className="text-display-lg-mobile md:text-display-lg">Imago Images</h1>
           <SearchBar value={q} onChange={handleQueryChange} isLoading={isLoading} />
+          <div className="gap-stack-sm flex flex-wrap">
+            <DateRangeFilter from={dateFrom} to={dateTo} onChange={handleDateRangeChange} />
+            <RestrictionFilter value={restrictions} onChange={handleRestrictionsChange} />
+          </div>
         </header>
 
         <section aria-live="polite" aria-busy={isLoading}>

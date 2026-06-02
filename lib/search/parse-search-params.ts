@@ -14,7 +14,7 @@ const SearchParamsSchema = z.object({
     .transform((s) =>
       s
         ? s
-            .split(', ')
+            .split(',')
             .map((x) => x.trim())
             .filter(Boolean)
         : undefined,
