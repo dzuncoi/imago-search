@@ -20,5 +20,7 @@ export function useSearchParamsState() {
     dateTo: parseAsString,
     // Restricted-in country codes, serialized as `?restrictions=GER,USA`.
     restrictions: parseAsArrayOf(parseAsString).withDefault([]),
+    // Single credit (fotografen), substring-matched by the API.
+    credit: parseAsString,
   })
 }

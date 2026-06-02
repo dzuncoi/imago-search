@@ -9,6 +9,7 @@ import { ResultGridSkeleton } from '@/components/search/ResultGridSkeleton'
 import { Pagination } from '@/components/search/Pagination'
 import { DateRangeFilter } from '@/components/search/DateRangeFilter'
 import { RestrictionFilter } from '@/components/search/RestrictionFilter'
+import { CreditFilter } from '@/components/search/CreditFilter'
 import { useSearchParamsState } from '@/hooks/useSearchParamsState'
 import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
@@ -22,17 +23,13 @@ function SearchPage() {
   const urlParams = useSearchParams()
   const queryString = urlParams.toString()
 
-  // Single owner of the URL params; writes here update `queryString` -> refetch.
-  const [{ q, dateFrom, dateTo, restrictions }, setParams] = useSearchParamsState()
+  const [{ q, dateFrom, dateTo, restrictions, credit }, setParams] = useSearchParamsState()
 
   const handleQueryChange = useCallback(
     (next: string) => setParams({ q: next, page: 1 }),
     [setParams],
   )
-  const handlePageChange = useCallback(
-    (page: number) => setParams({ page }),
-    [setParams],
-  )
+  const handlePageChange = useCallback((page: number) => setParams({ page }), [setParams])
   const handleDateRangeChange = useCallback(
     ({ from, to }: { from: string | null; to: string | null }) =>
       setParams({ dateFrom: from, dateTo: to, page: 1 }),
@@ -40,6 +37,10 @@ function SearchPage() {
   )
   const handleRestrictionsChange = useCallback(
     (next: string[]) => setParams({ restrictions: next, page: 1 }),
+    [setParams],
+  )
+  const handleCreditChange = useCallback(
+    (next: string | null) => setParams({ credit: next, page: 1 }),
     [setParams],
   )
 
@@ -60,6 +61,7 @@ function SearchPage() {
           <div className="gap-stack-sm flex flex-wrap">
             <DateRangeFilter from={dateFrom} to={dateTo} onChange={handleDateRangeChange} />
             <RestrictionFilter value={restrictions} onChange={handleRestrictionsChange} />
+            <CreditFilter value={credit} onChange={handleCreditChange} />
           </div>
         </header>
 
@@ -73,7 +75,9 @@ function SearchPage() {
           ) : hits.length > 0 ? (
             <div className="gap-stack-lg flex flex-col">
               <ResultGrid hits={hits} />
-              {data && <Pagination meta={data} onPageChange={handlePageChange} isFetching={isFetching} />}
+              {data && (
+                <Pagination meta={data} onPageChange={handlePageChange} isFetching={isFetching} />
+              )}
             </div>
           ) : (
             <p className="text-body-lg text-on-surface-variant">Search the archive to begin.</p>

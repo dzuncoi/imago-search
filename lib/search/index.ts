@@ -47,6 +47,8 @@ type FieldIndex = Map<string, Posting[]>
  * 2. Attach TF-IDF to each tokens per field
  */
 export class SearchIndex {
+  private credits: string[] | null = null
+
   constructor(
     private docs: Map<number, IndexedMediaItem>,
     private fieldIndexes: Record<FieldName, FieldIndex>,
@@ -89,6 +91,16 @@ export class SearchIndex {
 
   getAllDocs(): IndexedMediaItem[] {
     return [...this.docs.values()]
+  }
+
+  getCredits(): string[] {
+    if (this.credits) return this.credits
+    const unique = new Set<string>()
+    for (const doc of this.docs.values()) {
+      if (doc.fotografen) unique.add(doc.fotografen)
+    }
+    this.credits = [...unique].sort()
+    return this.credits
   }
 
   size(): number {
