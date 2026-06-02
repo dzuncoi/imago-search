@@ -47,11 +47,14 @@ export type SearchHit = {
   score: number
 }
 
-export type SearchResponse = {
-  items: SearchHit[]
+export type PaginationMeta = {
   page: number
   pageSize: number
   total: number
   totalPages: number
+}
+
+export type SearchResponse = PaginationMeta & {
+  items: SearchHit[]
   duration: number
 }
