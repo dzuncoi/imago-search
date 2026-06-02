@@ -26,6 +26,13 @@ export type Filters = {
   credit?: string
   dateFrom?: string
   dateTo?: string
+  restrictions?: string[]
+}
+
+export type Candidate = {
+  doc: IndexedMediaItem
+  docId: number
+  score: number
 }
 
 export type SearchRequest = Filters & {
