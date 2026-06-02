@@ -10,6 +10,8 @@ import {
 
 export const SORT_OPTIONS = ['relevance', 'date_asc', 'date_desc'] as const
 
+export type SortOption = (typeof SORT_OPTIONS)[number]
+
 export function useSearchParamsState() {
   return useQueryStates({
     q: parseAsString.withDefault(''),

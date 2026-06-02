@@ -10,7 +10,8 @@ import { Pagination } from '@/components/search/Pagination'
 import { DateRangeFilter } from '@/components/search/DateRangeFilter'
 import { RestrictionFilter } from '@/components/search/RestrictionFilter'
 import { CreditFilter } from '@/components/search/CreditFilter'
-import { useSearchParamsState } from '@/hooks/useSearchParamsState'
+import { SortFilter } from '@/components/search/SortFilter'
+import { useSearchParamsState, type SortOption } from '@/hooks/useSearchParamsState'
 import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
 
@@ -23,7 +24,7 @@ function SearchPage() {
   const urlParams = useSearchParams()
   const queryString = urlParams.toString()
 
-  const [{ q, dateFrom, dateTo, restrictions, credit }, setParams] = useSearchParamsState()
+  const [{ q, dateFrom, dateTo, restrictions, credit, sort }, setParams] = useSearchParamsState()
 
   const handleQueryChange = useCallback(
     (next: string) => setParams({ q: next, page: 1 }),
@@ -41,6 +42,10 @@ function SearchPage() {
   )
   const handleCreditChange = useCallback(
     (next: string | null) => setParams({ credit: next, page: 1 }),
+    [setParams],
+  )
+  const handleSortChange = useCallback(
+    (next: SortOption) => setParams({ sort: next, page: 1 }),
     [setParams],
   )
 
@@ -62,6 +67,7 @@ function SearchPage() {
             <DateRangeFilter from={dateFrom} to={dateTo} onChange={handleDateRangeChange} />
             <RestrictionFilter value={restrictions} onChange={handleRestrictionsChange} />
             <CreditFilter value={credit} onChange={handleCreditChange} />
+            <SortFilter value={sort} onChange={handleSortChange} />
           </div>
         </header>
 
