@@ -3,29 +3,37 @@
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { parseAsString, useQueryState } from 'nuqs'
 
 type SearchBarProps = {
+  value: string
+  onChange: (query: string) => void
   isLoading?: boolean
 }
 
 const SEARCH_DEBOUNCE = 250
 
-export function SearchBar({ isLoading = false }: SearchBarProps) {
-  const [inputValue, setInputValue] = useState('')
-  const [urlQ, setUrlQ] = useQueryState('q', parseAsString.withDefault(''))
+export function SearchBar({ value, onChange, isLoading = false }: SearchBarProps) {
+  const [inputValue, setInputValue] = useState(value)
+  const [prevInputValue, setPrevInputValue] = useState(value)
+
+  if (value !== prevInputValue) {
+    setPrevInputValue(value)
+    setInputValue(value)
+  }
 
   useEffect(() => {
-    if (inputValue === urlQ) return
-    const timer = setTimeout(() => {
-      setUrlQ(inputValue)
-    }, SEARCH_DEBOUNCE)
-
+    if (inputValue === value) return
+    const timer = setTimeout(() => onChange(inputValue), SEARCH_DEBOUNCE)
     return () => clearTimeout(timer)
-  }, [inputValue, urlQ, setUrlQ])
+  }, [inputValue, value, onChange])
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    onChange(inputValue)
+  }
 
   return (
-    <form role="search" className="gap-stack-md flex w-full items-end">
+    <form role="search" onSubmit={handleSubmit} className="gap-stack-md flex w-full items-end">
       <div className="flex-1">
         <label htmlFor="search-query" className="sr-only">
           Search images
